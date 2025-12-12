@@ -1,0 +1,109 @@
+# ====================================
+# 简道云适配器项目 - Git忽略配置
+# ====================================
+
+# ==================== IDE 相关 ====================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# WebStorm (已被 .idea/ 覆盖)
+
+
+
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ==================== 后端相关 (Java/Maven) ====================
+# Maven
+jdcloud-adapter-backend/target/
+jdcloud-adapter-backend/pom.xml.tag
+jdcloud-adapter-backend/pom.xml.releaseBackup
+jdcloud-adapter-backend/pom.xml.versionsBackup
+jdcloud-adapter-backend/release.properties
+jdcloud-adapter-backend/dependency-reduced-pom.xml
+
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ==================== 前端相关 (Node.js/Vue) ====================
+# Node.js
+jdcloud-adapter-fronted/node_modules/
+jdcloud-adapter-fronted/dist/
+jdcloud-adapter-fronted/dist-ssr/
+jdcloud-adapter-fronted/.cache/
+
+# Logs
+jdcloud-adapter-fronted/logs
+jdcloud-adapter-fronted/*.log
+jdcloud-adapter-fronted/npm-debug.log*
+jdcloud-adapter-fronted/yarn-debug.log*
+jdcloud-adapter-fronted/yarn-error.log*
+jdcloud-adapter-fronted/pnpm-debug.log*
+
+# Vite
+jdcloud-adapter-fronted/.vite/
+
+# ==================== 配置文件 (敏感信息) ====================
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+*.env
+
+# 数据库配置（如果包含敏感信息）
+**/application-prod.yml
+**/application-prod.properties
+
+# API密钥配置文件
+**/secret.properties
+**/credentials.json
+
+# ==================== 测试和覆盖率 ====================
+# 测试报告
+coverage/
+*.lcov
+.nyc_output
+
+# JUnit
+TEST-*.xml
+
+# ==================== 临时文件 ====================
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*~.nib
+*.orig
+
+# ==================== 文档相关 ====================
+# 本地笔记（如果不需要提交）
+# notes/
+# TODO.md
+
+# ==================== 其他 ====================
+# 编译产物
+build/
+lib/
