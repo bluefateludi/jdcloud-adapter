@@ -49,14 +49,14 @@ jdcloud-adapter/
 
 | 技术                      | 版本     | 用途                   |
 | ------------------------- | -------- | ---------------------- |
-| Node.js                   | 16.x     | 运行环境               |
+| Node.js                   | 20.x     | 运行环境               |
 | Vue.js                    | 3.4.x    | 前端框架（Composition API） |
 | Vue Router                | 4.x      | 路由管理               |
 | Pinia                     | 2.x      | 状态管理（替代Vuex）   |
 | Axios                     | 1.6.x    | HTTP客户端             |
 | Ant Design Vue            | 4.x      | UI组件库（Vue 3版本）  |
 | js-cookie                 | 3.x      | Cookie操作             |
-| Vite                      | 5.x      | 现代化构建工具         |
+| Vite                      | 7.x      | 现代化构建工具         |
 | ESLint + Prettier         | -        | 代码规范               |
 | VueUse                    | 10.x     | Vue 3组合式工具库      |
 | TypeScript (可选)         | 5.x      | 类型支持（学习推荐）   |
