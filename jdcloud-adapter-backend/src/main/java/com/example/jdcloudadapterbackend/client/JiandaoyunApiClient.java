@@ -100,9 +100,13 @@ public class JiandaoyunApiClient {
         String url = config.getBaseUrl() + config.getDataCreate();
         Map<String, Object> response = post(url, requestBody);
 
-        if (response != null && response.containsKey("data_id")) {
-            log.info("成功创建表单数据，data_id: {}", response.get("data_id"));
-            return response.get("data_id").toString();
+        if (response != null && response.containsKey("data")) {
+            Map<String, Object> responseData = (Map<String, Object>) response.get("data");
+            if (responseData.containsKey("_id")) {
+                String dataId = responseData.get("_id").toString();
+                log.info("成功创建表单数据，data_id: {}", dataId);
+                return dataId;
+            }
         }
         throw new RuntimeException("创建表单数据失败：" + gson.toJson(response));
     }
