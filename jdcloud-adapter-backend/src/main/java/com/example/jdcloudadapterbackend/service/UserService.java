@@ -64,12 +64,10 @@ public class UserService {
         validatePhoneUnique(request.getPhone());
 
         try {
-            // 3. (跳过)调用简道云通讯录API创建成员 - 需要企业权限，暂时注释 todo
-            // log.info("开始创建简道云成员: username={}, phone={}", request.getUsername(),
-            // request.getPhone());
-            // String jdcloudUserId = apiClient.createMember(request.getUsername(),
-            // request.getPhone());
-            // log.info("简道云成员创建成功: userId={}", jdcloudUserId);
+            // 3. 调用简道云通讯录API创建成员 todo 还是先注释调吧
+            log.info("开始创建简道云成员: username={}, phone={}", request.getUsername(), request.getPhone());
+            String jdcloudUserId = apiClient.createMember(request.getUsername(), request.getPhone());
+            log.info("简道云成员创建成功: userId={}", jdcloudUserId);
 
             // 4. 调用简道云数据API写入【用户基础表】(题目核心要求)
             log.info("开始写入简道云用户基础表: username={}, phone={}", request.getUsername(), request.getPhone());
@@ -154,7 +152,10 @@ public class UserService {
                         UserEntity user = new UserEntity();
                         user.setUsername(username);
                         user.setPhone(phone);
-                        user.setStatus(appConstants.getUser().getStatus().getEnabled().equals(userInfo.getStatus().getValue()) ? 1 : 0);
+                        user.setStatus(
+                                appConstants.getUser().getStatus().getEnabled().equals(userInfo.getStatus().getValue())
+                                        ? 1
+                                        : 0);
 
                         userMapper.insert(user);
                         log.info("用户注册成功: id={}, username={}", user.getId(), user.getUsername());
