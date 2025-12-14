@@ -13,11 +13,13 @@ import com.example.jdcloudadapterbackend.model.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Collections;
+import java.util.ArrayList;
 
 /**
  * 用户服务
@@ -32,6 +34,7 @@ public class UserService {
     private final JiandaoyunApiConfig apiConfig;
     private final JiandaoyunWidgetConfig widgetConfig;
     private final AppConstants appConstants;
+    private final Gson gson = new Gson();
 
     public UserService(UserMapper userMapper,
             JiandaoyunApiClient apiClient,
@@ -71,19 +74,41 @@ public class UserService {
 
             // 4. 调用简道云数据API写入【用户基础表】(题目核心要求)
             log.info("开始写入简道云用户基础表: username={}, phone={}", request.getUsername(), request.getPhone());
+
+            // 构建子表单数据结构
             Map<String, Object> formData = new HashMap<>();
 
-            // 构建简道云需要的数据结构（JiandaoyunApiClient会自动包装为 {"value": ...} 格式）
-            Map<String, Object> phoneField = new HashMap<>();
-            phoneField.put("phone", request.getPhone());
+            // 构建子表单记录
+            Map<String, Object> subTableRecord = new HashMap<>();
 
-            // 使用配置中的widget_id
-            formData.put(widgetConfig.getUser_id(), request.getUsername()); // ID字段（必填）
-            formData.put(widgetConfig.getUser_name(), request.getUsername()); // 用户名字段
-            formData.put(widgetConfig.getPhone(), phoneField); // 手机号字段
-            formData.put(widgetConfig.getStatus(), appConstants.getUser().getStatus().getEnabled()); // 状态字段
+            // 生成一个数字ID（可以基于时间戳或随机数）
+            Long numericId = System.currentTimeMillis() % 1000000; // 生成6位数字ID
 
-            String jdcloudDataId = apiClient.createFormData(
+            // 每个字段都需要包装为 value 格式（子表单内的字段也需要！）
+            Map<String, Object> userIdWrapper = new HashMap<>();
+            userIdWrapper.put("value", numericId);
+            subTableRecord.put(widgetConfig.getUser_id(), userIdWrapper);
+
+            Map<String, Object> userNameWrapper = new HashMap<>();
+            userNameWrapper.put("value", request.getUsername());
+            subTableRecord.put(widgetConfig.getUser_name(), userNameWrapper);
+
+            Map<String, Object> phoneWrapper = new HashMap<>();
+            phoneWrapper.put("value", request.getPhone());
+            subTableRecord.put(widgetConfig.getPhone(), phoneWrapper);
+
+            Map<String, Object> statusWrapper = new HashMap<>();
+            statusWrapper.put("value", "启用");
+            subTableRecord.put(widgetConfig.getStatus(), statusWrapper);
+
+            // 将子表单记录放入数组
+            List<Map<String, Object>> subTableRecords = new ArrayList<>();
+            subTableRecords.add(subTableRecord);
+
+            // 将数组放入父级子表单widget中
+            formData.put(widgetConfig.getParent_table(), subTableRecords);
+
+            String jdcloudDataId = apiClient.createSubFormData(
                     apiConfig.getFormIdUserBase(),
                     formData);
             log.info("简道云表单数据创建成功: dataId={}", jdcloudDataId);

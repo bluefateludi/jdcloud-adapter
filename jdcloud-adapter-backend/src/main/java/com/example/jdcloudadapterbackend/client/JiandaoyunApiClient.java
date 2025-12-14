@@ -112,6 +112,46 @@ public class JiandaoyunApiClient {
     }
 
     /**
+     * 创建子表单数据（特殊处理）
+     * @param formId 表单ID
+     * @param formData 未包装的数据（子表单内的字段已经是 value 格式）
+     * @return 数据ID
+     */
+    public String createSubFormData(String formId, Map<String, Object> formData) throws Exception {
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("app_id", config.getAppId());  // 使用AppId
+        requestBody.put("entry_id", formId);
+        // 使用自定义transaction_id格式，匹配示例
+        String transactionId = "test-" + (System.currentTimeMillis() % 1000) + "-" + System.currentTimeMillis();
+        requestBody.put("transaction_id", transactionId);
+
+        // 为父级 widget 也包装 value
+        Map<String, Object> formattedData = new HashMap<>();
+        for (Map.Entry<String, Object> entry : formData.entrySet()) {
+            Map<String, Object> valueWrapper = new HashMap<>();
+            valueWrapper.put("value", entry.getValue());
+            formattedData.put(entry.getKey(), valueWrapper);
+        }
+        requestBody.put("data", formattedData);
+
+        log.debug("请求简道云创建子表单数据: app_id={}, entry_id={}, transaction_id={}, data={}",
+                 config.getAppId(), formId, requestBody.get("transaction_id"), gson.toJson(formattedData));
+
+        String url = config.getBaseUrl() + config.getDataCreate();
+        Map<String, Object> response = post(url, requestBody);
+
+        if (response != null && response.containsKey("data")) {
+            Map<String, Object> responseData = (Map<String, Object>) response.get("data");
+            if (responseData.containsKey("_id")) {
+                String dataId = responseData.get("_id").toString();
+                log.info("成功创建子表单数据，data_id: {}", dataId);
+                return dataId;
+            }
+        }
+        throw new RuntimeException("创建子表单数据失败：" + gson.toJson(response));
+    }
+
+    /**
      * 查询表单数据（数据API）
      * @param formId 表单ID
      * @param filter 过滤条件

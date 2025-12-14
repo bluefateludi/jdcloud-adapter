@@ -36,4 +36,10 @@ public class JiandaoyunWidgetConfig {
      * 别名：status
      */
     private String status;
+
+    /**
+     * 父级子表单的widget_id
+     * 别名：parent_table
+     */
+    private String parent_table;
 }
