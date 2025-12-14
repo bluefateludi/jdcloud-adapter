@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -166,6 +167,60 @@ public class JiandaoyunApiClient {
         requestBody.put("limit", limit);
 
         String url = config.getBaseUrl() + config.getDataList();
+        return post(url, requestBody);
+    }
+
+    /**
+     * 查询表单数据（支持skip分页 - 题目3专用）
+     * @param appId 应用ID
+     * @param formId 表单ID
+     * @param filter 过滤条件
+     * @param limit 返回数量
+     * @param skip 跳过数量（分页关键参数）
+     * @return 查询结果
+     */
+    public Map<String, Object> retrieveFormDataWithSkip(
+            String appId,
+            String formId,
+            Map<String, Object> filter,
+            int limit,
+            int skip) throws Exception {
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("app_id", appId);
+        requestBody.put("entry_id", formId);
+        requestBody.put("filter", filter);
+        requestBody.put("limit", limit);
+        requestBody.put("skip", skip);  // 分页参数
+
+        log.debug("查询表单数据（分页）: app_id={}, entry_id={}, limit={}, skip={}",
+                appId, formId, limit, skip);
+
+        String url = config.getBaseUrl() + config.getDataList();
+        return post(url, requestBody);
+    }
+
+    /**
+     * 批量创建表单数据（题目3专用）
+     * @param appId 应用ID
+     * @param formId 表单ID
+     * @param dataList 数据列表
+     * @return 响应结果
+     */
+    public Map<String, Object> batchCreateFormData(
+            String appId,
+            String formId,
+            List<Map<String, Object>> dataList) throws Exception {
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("app_id", appId);
+        requestBody.put("entry_id", formId);
+        requestBody.put("data_list", dataList);
+
+        log.debug("批量创建表单数据: app_id={}, entry_id={}, count={}",
+                appId, formId, dataList.size());
+
+        String url = config.getBaseUrl() + config.getDataBatchCreate();
         return post(url, requestBody);
     }
 

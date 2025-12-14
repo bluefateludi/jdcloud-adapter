@@ -62,4 +62,9 @@ public class JiandaoyunApiConfig {
      * 数据API - 查询数据列表
      */
     private String dataList;
+
+    /**
+     * 数据API - 批量创建数据（题目3专用）
+     */
+    private String dataBatchCreate;
 }

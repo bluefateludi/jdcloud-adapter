@@ -1,0 +1,94 @@
+### 题目3：数据查询与Mock数据生成测试
+
+### 1. 生成100条测试数据（得1分）
+POST http://localhost:8081/api/data/mock?formId=693ebc497f13ce039a36b621&count=100
+
+###
+
+### 2. 基础查询 - 第1页（得5分）
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 1,
+  "pageSize": 20
+}
+
+###
+
+### 3. 分页查询 - 第2页（核心3分）
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 2,
+  "pageSize": 20
+}
+
+###
+
+### 4. 分页查询 - 第5页（最后一页，核心3分）
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 5,
+  "pageSize": 20
+}
+
+###
+
+### 5. 条件过滤 - 按部门查询
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 1,
+  "pageSize": 20,
+  "filters": {
+    "department": "研发部"
+  }
+}
+
+###
+
+### 6. 条件过滤 - 按状态查询
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 1,
+  "pageSize": 20,
+  "filters": {
+    "status": "在职"
+  }
+}
+
+###
+
+### 7. 多条件组合查询
+POST http://localhost:8081/api/data/query
+Content-Type: application/json
+
+{
+  "formId": "693ebc497f13ce039a36b621",
+  "page": 1,
+  "pageSize": 20,
+  "filters": {
+    "department": "研发部",
+    "status": "在职"
+  }
+}
+
+###
+
+### 8. 【可选】生成50000条大批量数据
+# 注意：此操作耗时较长（15-30分钟），请谨慎执行
+# POST http://localhost:8081/api/data/mock?formId=693ebc497f13ce039a36b621&count=50000
+
+###
