@@ -8,7 +8,6 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -77,7 +76,7 @@ public class JiandaoyunApiClient {
     /**
      * 创建表单数据（数据API）
      * @param formId 表单ID
-     * @param data 表单数据
+     * @param data 表单数据（原始值，不需要包装成{"value": ...}格式）
      * @return 数据ID
      */
     public String createFormData(String formId, Map<String, Object> data) throws Exception {
@@ -95,10 +94,14 @@ public class JiandaoyunApiClient {
         }
         requestBody.put("data", formattedData);
 
+        log.debug("请求简道云创建数据: app_id={}, entry_id={}, transaction_id={}, data={}",
+                 config.getAppId(), formId, requestBody.get("transaction_id"), gson.toJson(formattedData));
+
         String url = config.getBaseUrl() + config.getDataCreate();
         Map<String, Object> response = post(url, requestBody);
 
         if (response != null && response.containsKey("data_id")) {
+            log.info("成功创建表单数据，data_id: {}", response.get("data_id"));
             return response.get("data_id").toString();
         }
         throw new RuntimeException("创建表单数据失败：" + gson.toJson(response));
@@ -118,7 +121,7 @@ public class JiandaoyunApiClient {
         requestBody.put("filter", filter);
         requestBody.put("limit", limit);
 
-        String url = config.getBaseUrl() + config.getDataRetrieve();
+        String url = config.getBaseUrl() + config.getDataList();
         return post(url, requestBody);
     }
 

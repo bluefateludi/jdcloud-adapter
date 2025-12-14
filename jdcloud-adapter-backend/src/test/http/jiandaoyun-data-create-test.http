@@ -1,0 +1,39 @@
+### 向简道云添加单条数据测试
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "app_id": "693b9c8ea514c5f626f9e472",
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "test-003-1765081234567",
+  "data": {
+    "_widget_1765514393519": {
+      "value": [
+        {
+          "_widget_1765587253510": {
+            "value": 1004
+          },
+          "_widget_1765514393522": {
+            "value": "test065"
+          },
+          "_widget_1765586777737": {
+            "value": "13700137600"
+          },
+          "_widget_1765602268689": {
+            "value": "启用"
+          }
+        }
+      ]
+    }
+  }
+}
+
+### 响应期望
+### 成功响应应该是:
+### {
+###   "code": 200,
+###   "message": "success",
+###   "data": {
+###     "data_id": "生成的数据ID"
+###   }
+### }

@@ -59,7 +59,7 @@ public class JiandaoyunApiConfig {
     private String dataCreate;
 
     /**
-     * 数据API - 查询数据
+     * 数据API - 查询数据列表
      */
-    private String dataRetrieve;
+    private String dataList;
 }

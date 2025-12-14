@@ -1,0 +1,103 @@
+### 简道云数据创建校验测试
+
+### 测试1: 缺少app_id
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "test-003-1765081234567",
+  "data": {
+    "_widget_1765514393519": {
+      "value": [
+        {
+          "_widget_1765587253510": {
+            "value": 1004
+          }
+        }
+      ]
+    }
+  }
+}
+
+###
+
+### 测试2: app_id格式不正确
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "app_id": "invalid_app_id",
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "test-003-1765081234567",
+  "data": {
+    "_widget_1765514393519": {
+      "value": [
+        {
+          "_widget_1765587253510": {
+            "value": 1004
+          }
+        }
+      ]
+    }
+  }
+}
+
+###
+
+### 测试3: 空的data对象 (应该返回400错误)
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "app_id": "693b9c8ea514c5f626f9e472",
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "test-003-1765081234567",
+  "data": {}
+}
+
+###
+
+### 测试4: data中包含有效数据 (应该返回200成功)
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "app_id": "693b9c8ea514c5f626f9e472",
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "test-004-1765081234568",
+  "data": {
+    "_widget_1765514393519": {
+      "value": [
+        {
+          "_widget_1765587253510": {
+            "value": 1004
+          }
+        }
+      ]
+    }
+  }
+}
+
+###
+
+### 测试5: transaction_id格式不正确
+POST http://localhost:8081/api/jiandaoyun/data/create
+Content-Type: application/json
+
+{
+  "app_id": "693b9c8ea514c5f626f9e472",
+  "entry_id": "693b9c98bae0580052c38380",
+  "transaction_id": "invalid@transaction#id",
+  "data": {
+    "_widget_1765514393519": {
+      "value": [
+        {
+          "_widget_1765587253510": {
+            "value": 1004
+          }
+        }
+      ]
+    }
+  }
+}
