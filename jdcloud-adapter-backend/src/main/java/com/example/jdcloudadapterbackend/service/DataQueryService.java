@@ -79,13 +79,14 @@ public class DataQueryService {
                 queryTestConfig.getAppId(),
                 formId,
                 filter,
-                1,  // limit=1即可，只需要total字段
+                100,  // 改为100，简道云API不返回total字段
                 0
         );
 
-        if (response != null && response.containsKey("total")) {
-            Object totalObj = response.get("total");
-            return ((Number) totalObj).longValue();
+        // 简道云API不返回total字段，用data数组的长度作为总数
+        if (response != null && response.containsKey("data")) {
+            List<?> data = (List<?>) response.get("data");
+            return (long) data.size();
         }
         return 0L;
     }
@@ -107,6 +108,7 @@ public class DataQueryService {
                 skip
         );
 
+        // 解析简道云API响应：data 直接是数组
         if (response != null && response.containsKey("data")) {
             return (List<Map<String, Object>>) response.get("data");
         }
@@ -115,6 +117,7 @@ public class DataQueryService {
 
     /**
      * 构建简道云过滤条件
+     * TODO: 条件过滤功能已实现，等待完整测试（题目3可选功能）
      */
     private Map<String, Object> buildFilter(Map<String, String> filters) {
         if (filters == null || filters.isEmpty()) {
