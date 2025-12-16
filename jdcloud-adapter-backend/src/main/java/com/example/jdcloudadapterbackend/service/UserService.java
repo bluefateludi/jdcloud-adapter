@@ -67,10 +67,10 @@ public class UserService {
         validatePhoneUnique(request.getPhone());
 
         try {
-            // 3. 调用简道云通讯录API创建成员 todo 先注释掉
-            // log.info("开始创建简道云成员: username={}, phone={}", request.getUsername(), request.getPhone());
-            // String jdcloudUserId = apiClient.createMember(request.getUsername(), request.getPhone());
-            // log.info("简道云成员创建成功: userId={}", jdcloudUserId);
+            // 3. 调用简道云通讯录API创建成员（只需name参数）
+            log.info("开始创建简道云成员: name={}", request.getUsername());
+            String jdcloudUserId = apiClient.createMember(request.getUsername());
+            log.info("简道云成员创建成功: userId={}", jdcloudUserId);
 
             // 4. 调用简道云数据API写入【用户基础表】(题目核心要求)
             log.info("开始写入简道云用户基础表: username={}, phone={}", request.getUsername(), request.getPhone());
@@ -98,7 +98,7 @@ public class UserService {
             subTableRecord.put(widgetConfig.getPhone(), phoneWrapper);
 
             Map<String, Object> statusWrapper = new HashMap<>();
-            statusWrapper.put("value", "启用");
+            statusWrapper.put("value", request.getStatus());  // 使用前端传入的状态
             subTableRecord.put(widgetConfig.getStatus(), statusWrapper);
 
             // 将子表单记录放入数组
@@ -117,7 +117,8 @@ public class UserService {
             UserEntity user = new UserEntity();
             user.setUsername(request.getUsername());
             user.setPhone(request.getPhone());
-            user.setStatus(1); // 1=启用
+            // 根据前端传入的状态设置数据库状态值
+            user.setStatus(appConstants.getUser().getStatus().getEnabled().equals(request.getStatus()) ? 1 : 0);
 
             userMapper.insert(user);
             log.info("用户注册成功: id={}, username={}", user.getId(), user.getUsername());
