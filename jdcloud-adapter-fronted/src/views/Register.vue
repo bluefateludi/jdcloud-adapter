@@ -23,6 +23,17 @@
           />
         </a-form-item>
 
+        <!-- 状态选择 -->
+        <a-form-item label="状态" name="status">
+          <a-select
+            v-model:value="formState.status"
+            placeholder="请选择状态"
+          >
+            <a-select-option value="启用">启用</a-select-option>
+            <a-select-option value="停用">停用</a-select-option>
+          </a-select>
+        </a-form-item>
+
         <!-- 提交按钮 -->
         <a-form-item>
           <a-button
@@ -48,7 +59,8 @@ import { registerUser } from '../api/user'
 // 表单数据
 const formState = reactive({
   username: '',
-  phone: ''
+  phone: '',
+  status: '启用'  // 默认值为"启用"
 })
 
 // 加载状态
@@ -63,6 +75,9 @@ const rules = {
   phone: [
     { required: true, message: '请输入手机号' },
     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的11位手机号' }
+  ],
+  status: [
+    { required: true, message: '请选择状态' }
   ]
 }
 
@@ -80,6 +95,7 @@ const handleSubmit = async (values) => {
       // 清空表单
       formState.username = ''
       formState.phone = ''
+      formState.status = '启用'  // 重置为默认值
     } else {
       message.error(response.message || '注册失败')
     }

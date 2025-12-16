@@ -43,20 +43,22 @@ public class JiandaoyunApiClient {
 
     /**
      * 创建简道云企业成员（通讯录API）
-     * @param username 用户名
-     * @param mobile 手机号
+     * @param name 用户名
      * @return 成员ID
      */
-    public String createMember(String username, String mobile) throws Exception {
+    public String createMember(String name) throws Exception {
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("username", username);
-        requestBody.put("mobile", mobile);
+        requestBody.put("name", name);
 
         String url = config.getBaseUrl() + config.getMemberCreate();
         Map<String, Object> response = post(url, requestBody);
 
-        if (response != null && response.containsKey("user_id")) {
-            return response.get("user_id").toString();
+        // 简道云通讯录API返回格式: {"user": {"username": "R-xxx", "name": "xxx", ...}}
+        if (response != null && response.containsKey("user")) {
+            Map<String, Object> user = (Map<String, Object>) response.get("user");
+            if (user.containsKey("username")) {
+                return user.get("username").toString();
+            }
         }
         throw new RuntimeException("创建简道云成员失败：" + gson.toJson(response));
     }
